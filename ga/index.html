@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecionamento</title>
+</head>
+
+<body>
+    <script>
+        function getVisitCount() {
+            return parseInt(localStorage.getItem('visitCount')) || 0;
+        }
+
+        function saveInitialUtmParams() {
+            if (!localStorage.getItem('utmParams')) {
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.toString()) {
+                    localStorage.setItem('utmParams', '?' + urlParams.toString());
+                } else {
+                    localStorage.setItem('utmParams', '');
+                }
+            }
+        }
+
+        function redirectToPage() {
+            var visitCount = getVisitCount();
+            localStorage.setItem('visitCount', visitCount + 1);
+
+            var utmParams = localStorage.getItem('utmParams') || '';
+
+            var pages = [
+                '../up1/index.html', '../up3/index.html', '../up4/index.html', 
+                '../up5/index.html', '../up6/index.html', '../up7/index.html', 
+                '../up8/index.html', '../up9/index.html', '../up10/index.html', '../up11/index.html', '../up2/index.html', '../up4/index.html'
+            ];
+
+            var nextPage = pages[visitCount % pages.length];
+            
+            window.location.href = nextPage + (utmParams && !nextPage.includes('?') ? utmParams : utmParams.replace('?', '&'));
+
+        }
+
+        saveInitialUtmParams();
+        redirectToPage();
+    </script>
+</body>
+
+
+</html>
